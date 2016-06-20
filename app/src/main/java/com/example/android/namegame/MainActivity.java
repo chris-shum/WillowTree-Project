@@ -1,5 +1,6 @@
 package com.example.android.namegame;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<CharSequence> spinnerAdapter;
     String apiUrl;
     GetWTDataAsyncTask getWTData;
+    String willowTreeLogoURL;
+    Singleton mSingleton;
 //    int i;
 
     @Override
@@ -42,25 +47,42 @@ public class MainActivity extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gameModeSelectSpinner.setAdapter(spinnerAdapter);
         apiUrl = "http://api.namegame.willowtreemobile.com/";
-//        i = 0;
+        willowTreeLogoURL = "http://10477-presscdn-0-4.pagely.netdna-cdn.com/wp-content/uploads/2013/11/willowtreeapps_logo_vert-1024x819.png";
 
+        mSingleton = Singleton.getInstance();
+        mSingleton.employeeName.clear();
+        mSingleton.employeePhoto.clear();
+        mSingleton.randomNumbers.clear();
+        mSingleton.randomNumbers.add(-9999);
         getWTData = new GetWTDataAsyncTask();
         getWTData.execute(apiUrl);
+
+//        i = 0;
+
+        Picasso.with(this).load(willowTreeLogoURL).into(willowTreeLogoImageView);
+
 
 
         gameStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Singleton singleton = Singleton.getInstance();
-//                if (singleton != null) {
-//                    String test = singleton.getEmployeeName().get(i);
-//                    String toast = "Employee #" + i + " is " + test;
-//                    String url = singleton.getEmployeePhoto().get(i);
-//                    String toast2 = "Their photo is at " + url;
-//                    Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(MainActivity.this, toast2, Toast.LENGTH_SHORT).show();
-//                    i++;
-//                }
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                String gameMode = gameModeSelectSpinner.getSelectedItem().toString();
+                switch (gameMode){
+                    case "Normal Mode":
+                        intent.putExtra("Game Mode", 0);
+                        break;
+                    case "Matt Mode":
+                        intent.putExtra("Game Mode", 1);
+                        break;
+                    case "Reverse Mode":
+                        intent.putExtra("Game Mode", 2);
+                        break;
+                }
+                startActivity(intent);
+//                Toast.makeText(MainActivity.this, mSingleton.employeeName.get(77), Toast.LENGTH_SHORT).show();
+//                i++;
+
             }
         });
 
@@ -99,9 +121,8 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject object = dataArray.optJSONObject(i);
                     String employeeName = object.optString("name");
                     String employeePhoto = object.optString("url");
-                    Singleton singleton = Singleton.getInstance();
-                    singleton.employeeName.add(employeeName);
-                    singleton.employeePhoto.add(employeePhoto);
+                    mSingleton.employeeName.add(employeeName);
+                    mSingleton.employeePhoto.add(employeePhoto);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -114,5 +135,12 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(s);
             gameStartButton.setEnabled(true);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSingleton.randomNumbers.clear();
+        mSingleton.randomNumbers.add(-9999);
     }
 }

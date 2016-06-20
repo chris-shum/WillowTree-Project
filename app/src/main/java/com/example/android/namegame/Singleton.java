@@ -10,6 +10,7 @@ public class Singleton {
     public static Singleton singleton;
     ArrayList<String> employeeName = new ArrayList<>();
     ArrayList<String> employeePhoto = new ArrayList<>();
+    ArrayList<Integer> randomNumbers = new ArrayList<>();
 
     public Singleton() {
     }
@@ -21,11 +22,8 @@ public class Singleton {
         return singleton;
     }
 
-    public ArrayList<String> getEmployeeName() {
-        return employeeName;
+    public int getSize() {
+        return employeeName.size();
     }
 
-    public ArrayList<String> getEmployeePhoto() {
-        return employeePhoto;
-    }
 }
