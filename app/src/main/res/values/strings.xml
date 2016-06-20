@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">NameGame</string>
+
+    <string-array name="game_modes">
+        <item>Normal Mode</item>
+        <item>Matt Mode</item>
+        <item>Reverse Mode</item>
+    </string-array>
+</resources>
