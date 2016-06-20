@@ -13,11 +13,23 @@
     <ImageView
         android:id="@+id/willowTreeLogoImageView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The Name Game"
+        android:layout_margin="16dp"
+        android:textSize="@dimen/text_size"
+        android:layout_gravity="center_horizontal"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,18 +43,32 @@
 
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/hintsCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hints" />
+    <!--<CheckBox-->
+    <!--android:id="@+id/hintsCheckBox"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center_horizontal"-->
+
+    <!--android:text="Hints" />-->
 
     <Button
         android:id="@+id/gameStartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
         android:enabled="false"
+        android:text="Play" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:autoLink="web"
+        android:id="@+id/chrisShum"
+        android:gravity="center_horizontal"
+        android:text="A game by Chris Shum"
+
         />
 
 </LinearLayout>

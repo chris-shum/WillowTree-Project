@@ -13,8 +13,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Who is this?"
-        />
+        android:gravity="center"
+        android:textSize="@dimen/text_size"
+        android:text="Who is this?" />
 
     <ImageView
         android:id="@+id/reverseGameImageView"
@@ -25,19 +26,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
-        <TextView
+        <Button
             android:id="@+id/reverseGameRandomNameOne"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_weight="1" />
 
-        <TextView
+        <Button
             android:id="@+id/reverseGameRandomNameTwo"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -45,19 +47,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
-        <TextView
+        <Button
             android:id="@+id/reverseGameRandomNameThree"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_weight="1" />
 
-        <TextView
+        <Button
             android:id="@+id/reverseGameRandomNameFour"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -65,19 +68,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
-        <TextView
+        <Button
             android:id="@+id/reverseGameRandomNameFive"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_weight="1" />
 
-        <TextView
+        <Button
             android:id="@+id/reverseGameRandomNameSix"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_weight="1" />
 
     </LinearLayout>

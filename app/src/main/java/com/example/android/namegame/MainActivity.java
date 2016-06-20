@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     GetWTDataAsyncTask getWTData;
     String willowTreeLogoURL;
     Singleton mSingleton;
-//    int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +53,22 @@ public class MainActivity extends AppCompatActivity {
         mSingleton.employeePhoto.clear();
         mSingleton.randomNumbers.clear();
         mSingleton.randomNumbers.add(-9999);
+        mSingleton.setmCorrect(0);
+        mSingleton.setmIncorrect(0);
+        mSingleton.setmStreak(0);
+        mSingleton.setmTotalQuestionsAsked(0);
+
         getWTData = new GetWTDataAsyncTask();
         getWTData.execute(apiUrl);
 
-//        i = 0;
-
         Picasso.with(this).load(willowTreeLogoURL).into(willowTreeLogoImageView);
-
-
 
         gameStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
                 String gameMode = gameModeSelectSpinner.getSelectedItem().toString();
-                switch (gameMode){
+                switch (gameMode) {
                     case "Normal Mode":
                         intent.putExtra("Game Mode", 0);
                         break;
@@ -80,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 startActivity(intent);
-//                Toast.makeText(MainActivity.this, mSingleton.employeeName.get(77), Toast.LENGTH_SHORT).show();
-//                i++;
-
             }
         });
 

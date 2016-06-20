@@ -1,9 +1,14 @@
 package com.example.android.namegame;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +21,9 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // TODO: 6/20/16 sharedpreferences for high scores
+    // TODO: 6/20/16 hint mode? 
+
     TextView normalGameName;
     ImageView normalGameImageView1, normalGameImageView2, normalGameImageView3, normalGameImageView4, normalGameImageView5, normalGameImageView6;
 
@@ -24,9 +32,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     Singleton mSingleton;
 
-    int mCorrect;
-    int mIncorrect;
-    int mStreak;
+    int mGameMode;
+
+    Boolean newQuestion = true;
+    Boolean incorrect = false;
+
+    AlertDialog alert;
 
 
     @Override
@@ -40,8 +51,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         Intent intent = getIntent();
-        int gameMode = intent.getIntExtra("Game Mode", 0);
-        switch (gameMode) {
+        mGameMode = intent.getIntExtra("Game Mode", 0);
+        switch (mGameMode) {
             case 0:
                 setContentView(R.layout.activity_game_normal);
                 break;
@@ -66,15 +77,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
 
         reverseGameImageView = (ImageView) findViewById(R.id.reverseGameImageView);
-        reverseGameName1 = (TextView) findViewById(R.id.reverseGameRandomNameOne);
-        reverseGameName2 = (TextView) findViewById(R.id.reverseGameRandomNameTwo);
-        reverseGameName3 = (TextView) findViewById(R.id.reverseGameRandomNameThree);
-        reverseGameName4 = (TextView) findViewById(R.id.reverseGameRandomNameFour);
-        reverseGameName5 = (TextView) findViewById(R.id.reverseGameRandomNameFive);
-        reverseGameName6 = (TextView) findViewById(R.id.reverseGameRandomNameSix);
+        reverseGameName1 = (Button) findViewById(R.id.reverseGameRandomNameOne);
+        reverseGameName2 = (Button) findViewById(R.id.reverseGameRandomNameTwo);
+        reverseGameName3 = (Button) findViewById(R.id.reverseGameRandomNameThree);
+        reverseGameName4 = (Button) findViewById(R.id.reverseGameRandomNameFour);
+        reverseGameName5 = (Button) findViewById(R.id.reverseGameRandomNameFive);
+        reverseGameName6 = (Button) findViewById(R.id.reverseGameRandomNameSix);
 
 
-        switch (gameMode) {
+        switch (mGameMode) {
             case 0:
                 castNormalGame();
                 normalGamePlay();
@@ -88,10 +99,27 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 reverseGamePlay();
                 break;
         }
+
+
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Would you like a hint?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(GameActivity.this, "They clicked Yes", Toast.LENGTH_SHORT).show();
+                // TODO: 6/20/16 enter hint options
+            }
+        });
+
+//        snackbar.show();
+
+
+        if (mSingleton.dialogueBoxShowing) {
+            showDialog(this);
+        }
+
+
     }
 
     public void randomNumberGenerator() {
-        mSingleton.randomNumbers = new ArrayList<>();
         mSingleton.randomNumbers.clear();
 
         ArrayList<Integer> list = new ArrayList<Integer>();
@@ -190,18 +218,33 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void checkIfCorrect(int clickedNumber) {
 
         if (mSingleton.randomNumbers.get(clickedNumber) == mSingleton.randomNumbers.get(mSingleton.getRandomSelection())) {
-            mCorrect++;
-            mStreak++;
-            Toast.makeText(GameActivity.this, "Yes", Toast.LENGTH_SHORT).show();
+            if (!incorrect) {
+                mSingleton.mCorrect++;
+                mSingleton.mStreak++;
+            }
+            incorrect = false;
+            newQuestion = true;
+            mSingleton.mTotalQuestionsAsked++;
+            // TODO: 6/20/16 end button brings you back to main menu, saves scores in sharedpreferences
+            mSingleton.dialogueBoxShowing = true;
+            showDialog(this);
+
+
         } else {
-            mIncorrect++;
+            mSingleton.mStreak = 0;
+            incorrect = true;
+            if (newQuestion) {
+                mSingleton.mIncorrect++;
+                if (mSingleton.mCorrect < 0) {
+                    mSingleton.mCorrect = 0;
+                }
+            }
+            newQuestion = false;
             Toast.makeText(GameActivity.this, "No", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
-    public void castNormalGame(){
+    public void castNormalGame() {
         normalGameImageView1.setOnClickListener(this);
         normalGameImageView2.setOnClickListener(this);
         normalGameImageView3.setOnClickListener(this);
@@ -210,7 +253,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         normalGameImageView6.setOnClickListener(this);
     }
 
-    public void castReverseGame(){
+    public void castReverseGame() {
         reverseGameName1.setOnClickListener(this);
         reverseGameName2.setOnClickListener(this);
         reverseGameName3.setOnClickListener(this);
@@ -218,4 +261,57 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         reverseGameName5.setOnClickListener(this);
         reverseGameName6.setOnClickListener(this);
     }
+
+    // TODO: 6/20/16 create timer
+
+    protected void showDialog(final Context context) {
+
+        String records1 = "You got " + mSingleton.mCorrect + "/" + mSingleton.mTotalQuestionsAsked + " correct.";
+        String records2 = "Longest streak: " + mSingleton.mStreak;
+        String records = records1 + "\n" + records2;
+
+        ImageView image = new ImageView(this);
+        Picasso.with(this).load(mSingleton.employeePhoto.get(mSingleton.randomNumbers.get(mSingleton.getRandomSelection()))).into(image);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context).setTitle("Yes!  This is " + mSingleton.employeeName.get(mSingleton.randomNumbers.get(mSingleton.getRandomSelection())) + "!").
+                setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        mSingleton.dialogueBoxShowing = false;
+                        randomNumberGenerator();
+
+                        switch (mGameMode) {
+                            case 0:
+                                castNormalGame();
+                                normalGamePlay();
+                                break;
+                            case 1:
+                                castNormalGame();
+                                normalGamePlay();
+                                break;
+                            case 2:
+                                castReverseGame();
+                                reverseGamePlay();
+                                break;
+                        }
+                    }
+                }).
+                setNegativeButton("End", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        mSingleton.dialogueBoxShowing = false;
+                        Intent intent = new Intent(GameActivity.this, MainActivity.class);
+                        startActivity(intent);
+
+                    }
+                }).
+                setView(image).setMessage(records);
+        alert = builder.create();
+        alert.show();
+
+    }
+
+
 }
