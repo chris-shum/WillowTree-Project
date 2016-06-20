@@ -17,6 +17,8 @@ public class Singleton {
     int mStreak;
     int mTotalQuestionsAsked;
     Boolean dialogueBoxShowing = false;
+    int hintCount;
+    ArrayList<Integer> hints = new ArrayList<>();
 
     public Singleton() {
     }
@@ -75,6 +77,18 @@ public class Singleton {
 
     public void setDialogueBoxShowing(Boolean dialogueBoxShowing) {
         this.dialogueBoxShowing = dialogueBoxShowing;
+    }
+
+    public int getHintCount() {
+        return hintCount;
+    }
+
+    public void setHintCount(int hintCount) {
+        this.hintCount = hintCount;
+    }
+
+    public ArrayList<Integer> getHints(int i) {
+        return hints;
     }
 
     public int getSize() {

@@ -139,5 +139,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         mSingleton.randomNumbers.clear();
         mSingleton.randomNumbers.add(-9999);
+        mSingleton.setHintCount(0);
     }
 }
