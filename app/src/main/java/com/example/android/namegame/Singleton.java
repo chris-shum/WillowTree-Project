@@ -11,6 +11,7 @@ public class Singleton {
     ArrayList<String> employeeName = new ArrayList<>();
     ArrayList<String> employeePhoto = new ArrayList<>();
     ArrayList<Integer> randomNumbers = new ArrayList<>();
+    int randomSelection = -9999;
 
     public Singleton() {
     }
@@ -20,6 +21,14 @@ public class Singleton {
             singleton = new Singleton();
         }
         return singleton;
+    }
+
+    public int getRandomSelection() {
+        return randomSelection;
+    }
+
+    public void setRandomSelection(int randomSelection) {
+        this.randomSelection = randomSelection;
     }
 
     public int getSize() {
